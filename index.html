@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TAP Engine — The Infrastructure for Mobile Gaming</title>
+<meta name="description" content="Building the layer that will power the next generation of mobile games.">
+<meta name="theme-color" content="#050812">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TAP Engine">
+<meta property="og:title" content="TAP Engine — The Infrastructure for Mobile Gaming">
+<meta property="og:description" content="Building the layer that will power the next generation of mobile games.">
+<meta property="og:image" content="https://tap-engine.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TAP Engine — The Infrastructure for Mobile Gaming">
+<meta name="twitter:description" content="Building the layer that will power the next generation of mobile games.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20400%20400%22%3E%3Crect%20width=%22400%22%20height=%22400%22%20rx=%2288%22%20fill=%22%23050812%22/%3E%3Csvg%20x=%2256%22%20y=%2260%22%20width=%22288%22%20height=%22280%22%20viewBox=%2260%2040%20327%20297%22%3E%3Cpath%20fill=%22%23fff%22%20fill-rule=%22evenodd%22%20d=%22M%20173.00,124.04%2069.00,124.14%2068.00,123.98%2067.26,122.00%2068.72,108.00%2071.73,96.00%2076.00,86.06%2081.27,77.00%2085.72,71.00%2094.00,62.76%20103.42,56.00%20112.00,51.86%20120.00,49.49%20128.00,48.62%20224.00,48.49%20226.97,49.00%20214.00,58.62%20207.99,64.00%20201.23,71.00%20192.91,82.00%20186.00,93.46%20180.69,105.00%20174.84,123.00%20173.00,124.04%20Z%20M%20198.00,329.18%20188.00,329.73%20186.55,329.00%20186.37,328.00%20186.46,152.00%20187.89,136.00%20189.04,130.00%20192.00,119.73%20198.55,104.00%20204.00,94.41%20209.22,87.00%20218.03,77.00%20224.28,71.00%20231.00,65.78%20239.00,60.59%20248.00,55.99%20264.00,50.50%20272.83,49.00%20279.00,48.60%20376.00,48.34%20379.00,48.70%20379.35,50.00%20379.12,56.00%20377.85,65.00%20374.91,77.00%20372.23,83.00%20369.38,89.00%20364.00,97.44%20357.66,105.00%20349.51,112.00%20343.75,116.00%20335.52,120.00%20325.70,123.00%20314.00,124.14%20285.00,124.01%20278.00,124.83%20272.00,127.56%20267.18,132.00%20265.00,134.64%20262.00,140.55%20260.57,146.00%20260.32,250.00%20259.51,262.00%20257.39,273.00%20253.01,285.00%20250.43,290.00%20246.29,297.00%20237.48,308.00%20227.00,316.91%20217.00,323.18%20214.00,324.03%20210.00,326.15%20206.00,327.51%20198.00,329.18%20Z%20%22%20/%3E%3C/svg%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --bg:#050812;
+  --blue:#1E5BFF;
+  --cyan:#4FD1FF;
+  --teal:#00C2A8;
+  --text:#fff;
+  --muted:rgba(255,255,255,.6);
+  --faint:rgba(255,255,255,.35);
+  --line:rgba(255,255,255,.08);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#000;color:var(--text);
+  font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-weight:300;line-height:1.5;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 120% 90% at 50% 40%,var(--bg) 0%,#03050c 55%,#000 100%);
+}
+main,header,footer{position:relative;z-index:1}
+a{color:inherit}
+.visually-hidden{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  display:flex;align-items:center;
+  padding:calc(22px + env(safe-area-inset-top)) clamp(20px,4vw,48px) 22px;
+  pointer-events:none;
+  background:linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,0));
+}
+.topbar a{pointer-events:auto;display:inline-flex;color:#fff;padding:8px 0;min-height:44px;align-items:center}
+.topbar svg{height:28px;width:auto;display:block}
+@media (max-width:640px){.topbar svg{height:24px}}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative;min-height:100svh;
+  display:grid;place-items:center;
+  padding:clamp(96px,14vh,140px) 20px 110px;
+  overflow:hidden;isolation:isolate;
+}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-static{
+  position:absolute;inset:0;display:none;
+  background:
+    radial-gradient(ellipse 40% 45% at 64% 52%,rgba(79,209,255,.35),transparent 70%),
+    radial-gradient(ellipse 70% 60% at 62% 50%,rgba(30,91,255,.28),transparent 70%);
+}
+.hero-vignette{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 95% 85% at 50% 50%,transparent 60%,rgba(0,0,0,.4) 100%),
+    linear-gradient(to bottom,rgba(0,0,0,.15),transparent 20%,transparent 78%,#000 100%);
+}
+.grain{
+  position:absolute;inset:-50%;z-index:0;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size:160px 160px;
+  animation:grain 1.2s steps(4) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}25%{transform:translate(-2%,3%)}
+  50%{transform:translate(3%,-1%)}75%{transform:translate(-1%,-3%)}100%{transform:translate(0,0)}
+}
+.big-t{
+  position:absolute;left:50%;top:50%;z-index:0;
+  width:min(62vh,70vw);aspect-ratio:327/297;
+  transform:translate(-50%,-52%);
+  color:#fff;opacity:1;
+  filter:drop-shadow(0 0 14px rgba(79,209,255,.55)) drop-shadow(0 0 60px rgba(30,91,255,.5));
+  animation:bigbreathe 7s ease-in-out infinite;
+  will-change:opacity,filter;
+}
+.big-t svg{width:100%;height:100%;display:block;overflow:visible}
+.t-fill{opacity:.035}
+.t-stroke{stroke:rgba(79,209,255,.45);stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.t-run{stroke:#fff;stroke-width:2.4;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:90 910;stroke-dashoffset:0;
+  animation:run 9s linear infinite;
+  filter:drop-shadow(0 0 6px #4FD1FF) drop-shadow(0 0 16px rgba(79,209,255,.9))}
+.t-run2{animation-delay:-4.5s;stroke:rgba(200,240,255,.9);stroke-width:1.8}
+@keyframes run{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+.big-t::after{
+  content:"";position:absolute;inset:-20%;z-index:-1;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 52%,rgba(79,209,255,.16),rgba(30,91,255,.1) 40%,transparent 70%);
+}
+@keyframes bigbreathe{
+  0%,100%{filter:drop-shadow(0 0 14px rgba(79,209,255,.5)) drop-shadow(0 0 60px rgba(30,91,255,.45))}
+  50%{filter:drop-shadow(0 0 22px rgba(79,209,255,.8)) drop-shadow(0 0 90px rgba(30,91,255,.6))}
+}
+.big-t.rise{transform:translate(-50%,-48%)}
+.is-ready .big-t.rise{transform:translate(-50%,-52%);transition:opacity 1.6s var(--ease),transform 1.8s var(--ease)}
+@media (max-width:640px){.big-t{width:min(48vh,80vw);transform:translate(-50%,-50%)} .is-ready .big-t.rise{transform:translate(-50%,-50%)}}
+@media (prefers-reduced-motion:reduce){.big-t,.t-run{animation:none}.t-run{stroke-dasharray:none;stroke:rgba(255,255,255,.35);filter:none}}
+.hero-inner{
+  position:relative;z-index:1;text-align:center;max-width:1100px;width:100%;
+  display:flex;flex-direction:column;align-items:center;
+}
+.hero-mark{
+  width:84px;height:84px;color:#fff;
+  filter:drop-shadow(0 0 18px rgba(79,209,255,.35)) drop-shadow(0 0 48px rgba(30,91,255,.25));
+  animation:breathe 5.5s ease-in-out infinite;
+  will-change:transform,filter;
+}
+.hero-mark svg{width:100%;height:100%;display:block}
+@media (max-width:640px){.hero-mark{width:72px;height:72px}}
+@keyframes breathe{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 0 18px rgba(79,209,255,.3)) drop-shadow(0 0 48px rgba(30,91,255,.2))}
+  50%{transform:scale(1.045);filter:drop-shadow(0 0 26px rgba(79,209,255,.5)) drop-shadow(0 0 64px rgba(30,91,255,.32))}
+}
+.hero h1{
+  margin:0;
+  text-shadow:0 2px 30px rgba(0,0,0,.6);
+  font-weight:700;
+  font-size:clamp(2rem,4.6vw,4.2rem);
+  line-height:1.08;letter-spacing:-.02em;
+  text-wrap:balance;
+  max-width:14ch;
+}
+@media (max-width:640px){.hero h1{max-width:12ch;font-size:clamp(1.9rem,8.6vw,2.3rem)}}
+.hero .sub{
+  margin:26px 0 0;
+  font-weight:300;
+  font-size:clamp(1rem,1vw + .55rem,1.25rem);
+  line-height:1.5;color:rgba(255,255,255,.72);
+  max-width:34ch;text-wrap:balance;
+  text-shadow:0 1px 18px rgba(0,0,0,.6);
+}
+.cycle{
+  margin-top:clamp(36px,6vh,56px);
+  height:1.4em;
+  font-weight:500;
+  font-size:clamp(1.3rem,2vw,1.9rem);
+  letter-spacing:.02em;
+  position:relative;display:grid;place-items:center;
+}
+.cycle-word{
+  grid-area:1/1;
+  color:#fff;
+  text-shadow:0 0 18px rgba(79,209,255,.6),0 0 42px rgba(30,91,255,.35);
+  opacity:0;filter:blur(8px);transform:translateY(6px);
+  transition:opacity .7s var(--ease),filter .7s var(--ease),transform .7s var(--ease);
+  will-change:opacity,filter,transform;
+}
+.cycle-word.is-on{opacity:1;filter:blur(0);transform:translateY(0)}
+
+/* entrance */
+.rise{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .9s var(--ease)}
+.hero-mark.rise{animation-play-state:paused}
+.is-ready .rise{opacity:1;transform:none}
+.is-ready .hero-mark.rise{animation-play-state:running}
+.is-ready .hero-inner .rise:nth-child(1){transition-delay:.25s}
+.is-ready .hero-inner .rise:nth-child(2){transition-delay:.45s}
+.is-ready .hero-inner .rise:nth-child(3){transition-delay:.65s}
+
+.scroll-hint{
+  position:absolute;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));z-index:1;
+  width:1px;height:56px;transform:translateX(-50%);
+  background:linear-gradient(to bottom,transparent,rgba(255,255,255,.45),transparent);
+  overflow:hidden;
+}
+.scroll-hint::after{
+  content:"";position:absolute;left:0;top:-100%;width:100%;height:100%;
+  background:linear-gradient(to bottom,transparent,#fff,transparent);
+  animation:hint 2.4s var(--ease) infinite;
+}
+@keyframes hint{0%{top:-100%}60%,100%{top:100%}}
+
+/* ---------- Footer ---------- */
+.footer{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:18px clamp(20px,4vw,48px) calc(18px + env(safe-area-inset-bottom));
+  font-size:.78rem;color:var(--faint);font-weight:400;
+  background:linear-gradient(to top,rgba(0,0,0,.6),rgba(0,0,0,0));
+  pointer-events:none;
+}
+.footer a{
+  pointer-events:auto;color:var(--muted);text-decoration:none;
+  display:inline-flex;align-items:center;min-height:44px;
+  transition:color .3s;
+}
+.footer a:hover{color:#fff}
+
+/* ---------- Focus ---------- */
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+.field input:focus-visible{outline:none}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero-bg canvas{display:none}
+  .hero-static{display:block}
+  .grain{animation:none}
+  .hero-mark{animation:none}
+  .rise,.reveal{opacity:1;transform:none;filter:none;transition:opacity .4s}
+  .cycle-word{transition:opacity .3s}
+  .track{animation:none}
+  .scroll-hint::after{animation:none;top:0}
+  .field button,.cycle-word{will-change:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="#top" aria-label="TAP Engine">
+    <svg viewBox="320 507 2122 522" role="img" aria-label="TAP Engine" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" d="M 532.00,655.49 341.00,655.62 340.23,655.00 340.06,652.00 340.62,637.00 341.76,629.00 343.74,620.00 346.83,610.00 350.71,600.00 359.58,583.00 367.77,571.00 373.64,564.00 379.00,558.56 392.00,547.57 405.00,539.49 418.00,533.64 428.00,530.54 436.00,528.74 450.00,527.38 621.00,527.35 623.00,527.68 623.00,528.20 613.00,534.81 604.00,541.76 592.38,552.00 577.90,567.00 566.90,581.00 555.78,598.00 544.82,619.00 538.72,634.00 532.00,655.49 Z M 564.00,1008.07 554.00,1008.38 553.39,1007.00 553.57,699.00 554.61,687.00 556.67,674.00 558.61,665.00 562.66,651.00 566.65,640.00 570.53,631.00 577.64,617.00 583.70,607.00 593.84,593.00 605.00,580.16 619.00,566.62 629.00,558.58 641.00,550.61 656.00,542.69 670.00,536.85 683.00,532.68 691.00,530.74 703.00,528.69 717.00,527.60 887.00,527.29 888.00,527.67 888.23,534.00 887.40,546.00 885.34,559.00 881.35,574.00 875.46,589.00 868.45,602.00 861.18,612.00 852.00,622.02 839.00,633.38 830.00,639.42 817.00,646.15 806.00,650.45 795.00,653.23 779.00,655.59 721.00,655.61 714.00,656.74 708.00,658.73 700.00,662.97 695.00,667.19 689.65,674.00 686.64,679.00 683.63,686.00 681.69,693.00 680.66,700.00 680.43,882.00 679.37,895.00 678.26,902.00 675.31,914.00 672.33,923.00 665.26,939.00 655.47,955.00 650.29,962.00 644.17,969.00 632.00,980.38 624.00,986.45 615.00,992.31 599.00,1000.24 590.00,1003.45 583.00,1005.37 573.00,1007.24 564.00,1008.07 Z M 2090.00,682.28 2083.00,682.62 2078.00,681.33 2075.00,679.55 2072.24,677.00 2070.65,675.00 2068.70,671.00 2067.82,665.00 2068.70,660.00 2069.60,658.00 2071.65,655.00 2074.00,652.77 2080.00,649.79 2087.00,649.30 2090.00,649.67 2093.00,650.75 2096.00,652.59 2099.48,656.00 2101.32,659.00 2102.35,662.00 2102.67,666.00 2102.33,670.00 2100.12,675.00 2096.00,679.35 2093.00,681.15 2090.00,682.28 Z M 1320.00,855.50 1293.00,855.59 1291.51,855.00 1273.16,804.00 1272.00,803.00 1269.00,802.97 1186.00,803.23 1167.00,855.17 1166.00,855.61 1140.00,855.58 1139.00,855.57 1138.35,855.00 1206.67,671.00 1213.00,655.25 1214.00,654.91 1244.00,654.82 1245.00,655.09 1245.61,656.00 1319.45,852.00 1320.44,855.00 1320.00,855.50 Z M 1077.00,855.63 1052.00,855.64 1051.00,855.59 1050.44,855.00 1050.26,679.00 988.00,678.50 987.58,677.00 987.64,657.00 988.00,655.62 989.00,655.31 1135.00,655.33 1140.00,655.37 1140.65,656.00 1140.63,678.00 1140.00,678.69 1077.94,679.00 1077.83,852.00 1077.78,855.00 1077.00,855.63 Z M 1377.00,855.29 1351.00,855.56 1350.11,855.00 1349.94,854.00 1350.01,656.00 1351.00,655.29 1432.00,655.42 1442.00,656.64 1453.00,659.70 1460.00,662.76 1465.00,665.63 1469.00,668.46 1475.00,673.73 1480.46,680.00 1482.48,683.00 1485.30,688.00 1488.39,695.00 1491.37,705.00 1492.22,710.00 1492.67,722.00 1492.33,728.00 1491.32,734.00 1489.19,742.00 1487.34,747.00 1484.39,753.00 1481.20,758.00 1475.00,765.02 1470.00,769.33 1464.00,773.38 1453.00,778.37 1441.00,781.40 1431.00,782.53 1378.00,782.59 1377.48,783.00 1377.39,854.00 1377.00,855.29 Z M 1715.00,855.50 1593.00,855.55 1591.97,855.00 1592.00,655.91 1593.00,655.33 1712.00,655.31 1713.49,656.00 1713.31,678.00 1712.00,678.71 1619.00,678.69 1618.58,679.00 1618.28,742.00 1618.64,743.00 1706.00,743.50 1706.41,745.00 1706.43,765.00 1706.00,765.85 1705.00,766.20 1619.00,766.07 1618.35,767.00 1618.37,831.00 1618.46,832.00 1619.00,832.44 1715.00,832.47 1715.61,833.00 1715.76,834.00 1715.71,854.00 1715.60,855.00 1715.00,855.50 Z M 1429.17,759.00 1439.00,757.19 1448.00,753.29 1451.00,751.25 1455.00,747.47 1457.09,745.00 1460.17,740.00 1462.21,735.00 1464.18,727.00 1464.69,717.00 1464.24,711.00 1463.15,706.00 1461.00,700.08 1458.22,695.00 1454.00,689.77 1449.00,685.70 1441.00,681.81 1434.00,679.88 1426.00,678.80 1378.00,678.73 1377.34,680.00 1377.60,759.00 1429.17,759.00 Z M 1264.11,779.00 1230.30,684.00 1230.00,683.26 1229.00,682.96 1194.89,777.00 1194.52,779.00 1195.00,779.36 1236.00,779.41 1263.00,779.37 1264.11,779.00 Z M 1869.00,855.54 1846.00,855.57 1845.28,855.00 1845.04,770.00 1844.26,758.00 1843.18,752.00 1841.33,746.00 1838.38,740.00 1835.46,736.00 1832.00,732.68 1829.00,730.71 1824.00,728.63 1820.00,727.65 1813.00,727.09 1806.00,727.64 1802.00,728.64 1797.00,730.64 1792.00,733.68 1788.00,737.11 1783.83,742.00 1780.84,747.00 1777.90,755.00 1776.70,761.00 1776.41,768.00 1776.22,855.00 1775.00,855.60 1752.00,855.56 1750.73,855.00 1750.58,709.00 1751.00,708.04 1752.00,707.64 1774.43,708.00 1774.82,709.00 1775.00,730.22 1776.00,729.55 1777.66,727.00 1784.00,719.82 1793.00,712.74 1799.00,709.55 1804.00,707.65 1814.00,705.58 1828.00,705.64 1834.00,706.65 1841.00,708.84 1845.00,710.66 1851.00,714.49 1856.02,719.00 1859.47,723.00 1863.23,729.00 1866.22,736.00 1868.31,743.00 1869.78,753.00 1870.15,761.00 1870.07,853.00 1869.93,855.00 1869.00,855.54 Z M 1975.00,914.12 1964.00,914.14 1955.00,913.37 1949.00,912.29 1942.00,910.29 1933.00,906.49 1926.00,902.35 1918.00,895.44 1912.58,889.00 1908.84,883.00 1908.26,881.00 1910.00,879.65 1916.00,876.58 1930.00,870.28 1931.00,871.15 1933.86,877.00 1938.19,882.00 1944.00,886.16 1951.00,889.11 1962.00,891.33 1974.00,891.50 1984.00,890.20 1992.00,887.34 1997.00,884.06 2001.00,879.98 2004.20,875.00 2007.23,867.00 2008.27,862.00 2009.19,852.00 2009.27,841.00 2008.60,829.00 2008.00,828.28 2000.50,838.00 1996.00,842.36 1992.00,845.34 1985.00,849.17 1975.00,852.37 1969.00,853.28 1963.00,853.45 1958.00,853.24 1951.00,852.18 1944.00,850.31 1939.00,848.26 1929.00,842.16 1924.21,838.00 1919.46,833.00 1913.65,825.00 1908.53,815.00 1904.74,804.00 1902.61,793.00 1901.88,779.00 1902.75,767.00 1905.59,753.00 1908.71,744.00 1911.56,738.00 1915.74,731.00 1919.61,726.00 1926.00,719.49 1932.00,714.68 1937.00,711.67 1944.00,708.63 1951.00,706.67 1960.00,705.49 1969.00,705.65 1979.00,707.63 1987.00,710.89 1993.00,714.53 2000.00,720.43 2008.00,729.76 2009.00,730.32 2009.57,709.00 2010.00,707.99 2033.00,707.67 2034.12,709.00 2034.05,854.00 2033.48,866.00 2032.31,873.00 2029.25,882.00 2025.50,889.00 2019.05,897.00 2013.00,902.24 2006.00,906.49 1997.00,910.25 1989.00,912.43 1975.00,914.12 Z M 2257.00,855.06 2256.00,855.60 2233.00,855.59 2231.93,855.00 2231.70,766.00 2231.33,758.00 2230.27,752.00 2228.38,746.00 2226.00,741.11 2223.20,737.00 2220.00,733.73 2216.00,730.98 2211.00,728.76 2207.00,727.73 2200.00,727.17 2193.00,727.67 2189.00,728.69 2182.00,731.66 2177.00,734.98 2172.65,739.00 2168.84,744.00 2166.69,748.00 2164.81,753.00 2163.67,758.00 2163.06,769.00 2163.04,855.00 2162.00,855.63 2139.00,855.56 2137.69,855.00 2137.56,709.00 2138.00,708.03 2161.00,707.65 2161.65,708.00 2162.16,709.00 2161.92,729.00 2163.00,729.52 2165.52,726.00 2170.09,721.00 2175.00,716.51 2179.00,713.56 2184.00,710.63 2191.00,707.74 2201.00,705.66 2214.00,705.72 2220.00,706.70 2227.00,708.76 2231.00,710.53 2236.00,713.50 2240.00,716.63 2245.21,722.00 2249.24,728.00 2252.37,735.00 2255.17,745.00 2256.41,753.00 2257.11,767.00 2257.00,855.06 Z M 2371.00,857.11 2363.00,857.65 2354.00,857.60 2343.00,856.30 2335.00,854.29 2330.00,852.45 2319.00,846.46 2314.44,843.00 2309.00,837.88 2304.76,833.00 2300.55,827.00 2296.64,820.00 2293.62,813.00 2291.64,807.00 2289.78,799.00 2288.65,791.00 2288.31,781.00 2288.59,772.00 2289.63,764.00 2291.70,755.00 2293.74,749.00 2299.57,737.00 2303.55,731.00 2307.60,726.00 2313.00,720.66 2318.00,716.72 2323.00,713.60 2329.00,710.62 2334.00,708.74 2342.00,706.68 2349.00,705.64 2356.00,705.41 2363.00,705.66 2370.00,706.60 2381.00,709.63 2386.00,711.81 2393.00,715.82 2397.00,718.74 2402.00,723.35 2405.32,727.00 2409.47,733.00 2415.27,745.00 2417.31,751.00 2419.25,759.00 2421.33,777.00 2420.96,787.00 2420.83,788.00 2420.00,788.77 2314.96,789.00 2314.82,792.00 2315.76,799.00 2317.66,806.00 2321.00,813.92 2324.81,820.00 2330.00,825.44 2335.00,829.28 2341.00,832.33 2347.00,834.24 2354.00,835.37 2364.00,835.37 2371.00,834.14 2376.00,832.41 2383.00,828.30 2386.74,825.00 2390.25,821.00 2395.00,813.39 2403.00,814.71 2418.00,818.46 2418.43,819.00 2417.45,822.00 2412.39,832.00 2406.00,840.00 2400.00,845.48 2394.00,849.51 2386.00,853.42 2380.00,855.43 2371.00,857.11 Z M 2098.00,855.11 2097.00,855.63 2074.00,855.62 2072.83,855.00 2072.66,709.00 2073.00,708.15 2074.00,707.68 2097.00,707.64 2098.23,709.00 2098.00,855.11 Z M 2395.18,767.00 2394.05,759.00 2391.28,750.00 2388.24,744.00 2383.00,737.28 2378.00,732.85 2370.00,728.78 2361.00,726.85 2356.00,726.65 2347.00,727.81 2341.00,729.72 2335.00,732.78 2328.54,738.00 2323.65,744.00 2319.75,751.00 2316.85,759.00 2315.46,767.00 2316.00,767.44 2394.00,767.47 2395.18,767.00 Z M 1974.88,830.00 1983.00,828.22 1990.00,825.21 1993.00,823.18 1997.00,819.34 2002.06,812.00 2004.32,807.00 2006.26,801.00 2008.20,791.00 2008.78,780.00 2008.40,769.00 2007.16,761.00 2004.33,752.00 2000.17,744.00 1995.00,737.70 1989.00,732.75 1981.00,728.86 1976.00,727.62 1967.00,727.03 1961.00,727.73 1957.00,728.78 1950.00,732.00 1943.37,737.00 1939.66,741.00 1936.75,745.00 1933.82,750.00 1931.63,755.00 1928.80,765.00 1927.68,774.00 1927.79,787.00 1929.78,799.00 1932.81,808.00 1936.64,815.00 1942.00,821.33 1949.00,826.22 1957.00,829.19 1965.00,830.37 1974.88,830.00 Z " /></svg>
+  </a>
+</header>
+
+<main id="top">
+
+  <section class="hero" aria-labelledby="headline">
+    <div class="hero-bg" aria-hidden="true">
+      <canvas id="scene"></canvas>
+      <div class="hero-static"></div>
+    </div>
+    <div class="big-t rise" aria-hidden="true">
+      <svg viewBox="60 40 327 297" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path class="t-fill" fill="currentColor" fill-rule="evenodd" d="M 173.00,124.04 69.00,124.14 68.00,123.98 67.26,122.00 68.72,108.00 71.73,96.00 76.00,86.06 81.27,77.00 85.72,71.00 94.00,62.76 103.42,56.00 112.00,51.86 120.00,49.49 128.00,48.62 224.00,48.49 226.97,49.00 214.00,58.62 207.99,64.00 201.23,71.00 192.91,82.00 186.00,93.46 180.69,105.00 174.84,123.00 173.00,124.04 Z M 198.00,329.18 188.00,329.73 186.55,329.00 186.37,328.00 186.46,152.00 187.89,136.00 189.04,130.00 192.00,119.73 198.55,104.00 204.00,94.41 209.22,87.00 218.03,77.00 224.28,71.00 231.00,65.78 239.00,60.59 248.00,55.99 264.00,50.50 272.83,49.00 279.00,48.60 376.00,48.34 379.00,48.70 379.35,50.00 379.12,56.00 377.85,65.00 374.91,77.00 372.23,83.00 369.38,89.00 364.00,97.44 357.66,105.00 349.51,112.00 343.75,116.00 335.52,120.00 325.70,123.00 314.00,124.14 285.00,124.01 278.00,124.83 272.00,127.56 267.18,132.00 265.00,134.64 262.00,140.55 260.57,146.00 260.32,250.00 259.51,262.00 257.39,273.00 253.01,285.00 250.43,290.00 246.29,297.00 237.48,308.00 227.00,316.91 217.00,323.18 214.00,324.03 210.00,326.15 206.00,327.51 198.00,329.18 Z "/>
+        <path class="t-stroke" d="M 173.00,124.04 69.00,124.14 68.00,123.98 67.26,122.00 68.72,108.00 71.73,96.00 76.00,86.06 81.27,77.00 85.72,71.00 94.00,62.76 103.42,56.00 112.00,51.86 120.00,49.49 128.00,48.62 224.00,48.49 226.97,49.00 214.00,58.62 207.99,64.00 201.23,71.00 192.91,82.00 186.00,93.46 180.69,105.00 174.84,123.00 173.00,124.04 Z M 198.00,329.18 188.00,329.73 186.55,329.00 186.37,328.00 186.46,152.00 187.89,136.00 189.04,130.00 192.00,119.73 198.55,104.00 204.00,94.41 209.22,87.00 218.03,77.00 224.28,71.00 231.00,65.78 239.00,60.59 248.00,55.99 264.00,50.50 272.83,49.00 279.00,48.60 376.00,48.34 379.00,48.70 379.35,50.00 379.12,56.00 377.85,65.00 374.91,77.00 372.23,83.00 369.38,89.00 364.00,97.44 357.66,105.00 349.51,112.00 343.75,116.00 335.52,120.00 325.70,123.00 314.00,124.14 285.00,124.01 278.00,124.83 272.00,127.56 267.18,132.00 265.00,134.64 262.00,140.55 260.57,146.00 260.32,250.00 259.51,262.00 257.39,273.00 253.01,285.00 250.43,290.00 246.29,297.00 237.48,308.00 227.00,316.91 217.00,323.18 214.00,324.03 210.00,326.15 206.00,327.51 198.00,329.18 Z " pathLength="1000"/>
+        <path class="t-run" d="M 173.00,124.04 69.00,124.14 68.00,123.98 67.26,122.00 68.72,108.00 71.73,96.00 76.00,86.06 81.27,77.00 85.72,71.00 94.00,62.76 103.42,56.00 112.00,51.86 120.00,49.49 128.00,48.62 224.00,48.49 226.97,49.00 214.00,58.62 207.99,64.00 201.23,71.00 192.91,82.00 186.00,93.46 180.69,105.00 174.84,123.00 173.00,124.04 Z M 198.00,329.18 188.00,329.73 186.55,329.00 186.37,328.00 186.46,152.00 187.89,136.00 189.04,130.00 192.00,119.73 198.55,104.00 204.00,94.41 209.22,87.00 218.03,77.00 224.28,71.00 231.00,65.78 239.00,60.59 248.00,55.99 264.00,50.50 272.83,49.00 279.00,48.60 376.00,48.34 379.00,48.70 379.35,50.00 379.12,56.00 377.85,65.00 374.91,77.00 372.23,83.00 369.38,89.00 364.00,97.44 357.66,105.00 349.51,112.00 343.75,116.00 335.52,120.00 325.70,123.00 314.00,124.14 285.00,124.01 278.00,124.83 272.00,127.56 267.18,132.00 265.00,134.64 262.00,140.55 260.57,146.00 260.32,250.00 259.51,262.00 257.39,273.00 253.01,285.00 250.43,290.00 246.29,297.00 237.48,308.00 227.00,316.91 217.00,323.18 214.00,324.03 210.00,326.15 206.00,327.51 198.00,329.18 Z " pathLength="1000"/>
+        <path class="t-run t-run2" d="M 173.00,124.04 69.00,124.14 68.00,123.98 67.26,122.00 68.72,108.00 71.73,96.00 76.00,86.06 81.27,77.00 85.72,71.00 94.00,62.76 103.42,56.00 112.00,51.86 120.00,49.49 128.00,48.62 224.00,48.49 226.97,49.00 214.00,58.62 207.99,64.00 201.23,71.00 192.91,82.00 186.00,93.46 180.69,105.00 174.84,123.00 173.00,124.04 Z M 198.00,329.18 188.00,329.73 186.55,329.00 186.37,328.00 186.46,152.00 187.89,136.00 189.04,130.00 192.00,119.73 198.55,104.00 204.00,94.41 209.22,87.00 218.03,77.00 224.28,71.00 231.00,65.78 239.00,60.59 248.00,55.99 264.00,50.50 272.83,49.00 279.00,48.60 376.00,48.34 379.00,48.70 379.35,50.00 379.12,56.00 377.85,65.00 374.91,77.00 372.23,83.00 369.38,89.00 364.00,97.44 357.66,105.00 349.51,112.00 343.75,116.00 335.52,120.00 325.70,123.00 314.00,124.14 285.00,124.01 278.00,124.83 272.00,127.56 267.18,132.00 265.00,134.64 262.00,140.55 260.57,146.00 260.32,250.00 259.51,262.00 257.39,273.00 253.01,285.00 250.43,290.00 246.29,297.00 237.48,308.00 227.00,316.91 217.00,323.18 214.00,324.03 210.00,326.15 206.00,327.51 198.00,329.18 Z " pathLength="1000"/>
+      </svg>
+    </div>
+    <div class="hero-vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <h1 id="headline" class="rise">The Infrastructure for Mobile Gaming</h1>
+      <p class="sub rise">Building the layer that will power the next generation of mobile games.</p>
+      <div class="cycle rise" aria-live="polite" aria-atomic="true">
+        <span class="cycle-word is-on" id="cycle-word">Games.</span>
+      </div>
+    </div>
+
+  </section>
+
+
+
+</main>
+
+<footer class="footer">
+  <span>© 2026 TAP Engine SA</span>
+  <a href="mailto:hello@tap-engine.io">hello@tap-engine.io</a>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+
+  /* ---------- Entrance ---------- */
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ root.classList.add('is-ready'); }); });
+
+  /* ---------- Cycling word ---------- */
+  var words = ['Games.','Players.','Studios.','Scale.','Soon.'];
+  var wordEl = document.getElementById('cycle-word');
+  if (reduce) {
+    wordEl.textContent = 'Soon.';
+  } else {
+    var wi = 0;
+    setTimeout(function tick(){
+      wordEl.classList.remove('is-on');
+      setTimeout(function(){
+        wi = (wi + 1) % words.length;
+        wordEl.textContent = words[wi];
+        wordEl.classList.add('is-on');
+        setTimeout(tick, 2500);
+      }, 700);
+    }, 3000);
+  }
+
+  /* ---------- Scroll reveals ---------- */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) {
+          var el = e.target;
+          var sib = el.parentNode.children, idx = Array.prototype.indexOf.call(sib, el);
+          el.style.transitionDelay = '0s';
+          el.classList.add('in');
+          io.unobserve(el);
+        }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    reveals.forEach(function(el){ io.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- Hero scene ---------- */
+  var canvas = document.getElementById('scene');
+  if (reduce || !canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d', { alpha: true });
+  var W = 0, H = 0, dpr = 1;
+  var mobile = window.matchMedia('(max-width: 768px)').matches;
+  var coarse = window.matchMedia('(pointer: coarse)').matches;
+  var PARTICLES = mobile ? 120 : 300;
+  var STREAKS   = mobile ? 18  : 40;
+  var particles = [], streaks = [];
+  var core = { x: 0.5, y: 0.48 };
+  var RING = 0.2;    // relative radius where energy reaches the T       // relative core position (center-right)
+  var tx = 0, ty = 0, px = 0, py = 0;    // parallax target / current (px)
+  var t0 = performance.now(), running = true;
+
+  function rand(a, b){ return a + Math.random() * (b - a); }
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+    var r = canvas.parentNode.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function spawnParticle(p, fresh){
+    p = p || {};
+    var layer = Math.random();                           // 0..1 → depth
+    p.layer = layer < .5 ? 0 : layer < .85 ? 1 : 2;      // 3 parallax layers
+    var ang = rand(0, Math.PI * 2);
+    var rad = fresh ? rand(0.35, 1.25) : rand(0.05, 1.25); // relative to min(W,H)
+    p.a = ang; p.r = Math.max(rad, RING);
+    p.speed = rand(0.018, 0.045) * (1 + p.layer * 0.45);
+    p.spin  = rand(0.02, 0.07) * (Math.random() < .5 ? -1 : 1);
+    p.size  = (0.9 + p.layer * 0.9) * rand(0.7, 1.4);
+    p.alpha = rand(0.45, 1);
+    p.hue   = Math.random() < .75 ? 'cyan' : 'blue';
+    return p;
+  }
+  function spawnStreak(s, fresh){
+    s = s || {};
+    s.a = rand(0, Math.PI * 2);
+    s.r = fresh ? rand(0.5, 1.3) : rand(RING + 0.05, 1.3);
+    s.speed = rand(0.08, 0.16);
+    s.spin = rand(0.015, 0.04) * (Math.random() < .5 ? -1 : 1);
+    s.len = rand(0.1, 0.26);
+    s.width = rand(1, 2.2);
+    s.alpha = rand(0.3, 0.75);
+    s.layer = Math.random() < .5 ? 1 : 2;
+    return s;
+  }
+  for (var i = 0; i < PARTICLES; i++) particles.push(spawnParticle(null, false));
+  for (var j = 0; j < STREAKS; j++) streaks.push(spawnStreak(null, false));
+
+  function draw(now){
+    if (!running) return;
+    var dt = Math.min(0.05, (now - t0) / 1000); t0 = now;
+    var time = now / 1000;
+
+    // parallax easing
+    px += (tx - px) * 0.05; py += (ty - py) * 0.05;
+
+    var base = Math.min(W, H);
+    var cx = W * core.x, cy = H * core.y;
+    var globalRot = time * 0.05;   // slow field rotation
+
+    ctx.clearRect(0, 0, W, H);
+
+    // core glow (slow pulse)
+    var pulse = 1 + Math.sin(time * 0.9) * 0.06;
+    var g = ctx.createRadialGradient(cx + px * 1.2, cy + py * 1.2, 0, cx + px * 1.2, cy + py * 1.2, base * 0.55 * pulse);
+    g.addColorStop(0,   'rgba(79,209,255,0.28)');
+    g.addColorStop(0.25,'rgba(79,209,255,0.18)');
+    g.addColorStop(0.5, 'rgba(30,91,255,0.12)');
+    g.addColorStop(1,   'rgba(30,91,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    // streaks
+    ctx.lineCap = 'round';
+    for (var k = 0; k < streaks.length; k++) {
+      var s = streaks[k];
+      s.r -= s.speed * dt;
+      s.a += s.spin * dt;
+      if (s.r < RING) spawnStreak(s, true);
+      var par = 1 + s.layer * 0.6;
+      var ox = cx + px * par, oy = cy + py * par;
+      var a = s.a + globalRot;
+      var r1 = s.r * base, r2 = (s.r + s.len) * base;
+      var x1 = ox + Math.cos(a) * r1, y1 = oy + Math.sin(a) * r1 * 0.9;
+      var x2 = ox + Math.cos(a) * r2, y2 = oy + Math.sin(a) * r2 * 0.9;
+      var fade = Math.min(1, (s.r - RING) / 0.18 + 0.15);
+      var lg = ctx.createLinearGradient(x1, y1, x2, y2);
+      lg.addColorStop(0, 'rgba(255,255,255,' + (s.alpha * fade) + ')');
+      lg.addColorStop(0.3, 'rgba(79,209,255,' + (s.alpha * fade * 0.9) + ')');
+      lg.addColorStop(1, 'rgba(30,91,255,0)');
+      ctx.strokeStyle = lg; ctx.lineWidth = s.width;
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    }
+
+    // particles
+    for (var n = 0; n < particles.length; n++) {
+      var p = particles[n];
+      p.r -= p.speed * dt * (0.5 + (1.3 - p.r) * 0.9);  // accelerates toward the core
+      p.a += p.spin * dt;
+      if (p.r < RING * 0.85) spawnParticle(p, true);
+      var pp = 1 + p.layer * 0.6;
+      var pxo = cx + px * pp, pyo = cy + py * pp;
+      var ang2 = p.a + globalRot * (1 + p.layer * 0.3);
+      var rr = p.r * base;
+      var x = pxo + Math.cos(ang2) * rr, y = pyo + Math.sin(ang2) * rr * 0.9;
+      if (x < -10 || x > W + 10 || y < -10 || y > H + 10) continue;
+      var near = Math.max(0, 1 - (p.r - RING * 0.85) / 0.25);
+      var al = p.alpha * Math.min(1, p.r / 0.08 + 0.15) * (0.7 + near * 0.5);
+      var tw = 0.75 + 0.25 * Math.sin(time * 2.2 + n);
+      ctx.fillStyle = p.hue === 'cyan'
+        ? 'rgba(' + (79 + near * 176) + ',' + (209 + near * 46) + ',255,' + (al * tw) + ')'
+        : 'rgba(' + (30 + near * 200) + ',' + (91 + near * 150) + ',255,' + (al * tw) + ')';
+      ctx.beginPath(); ctx.arc(x, y, p.size * (1 + near * 0.6), 0, Math.PI * 2); ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  // mouse parallax (desktop), scroll parallax (touch) — max 12px
+  var MAX = 12;
+  if (!coarse) {
+    window.addEventListener('mousemove', function(e){
+      tx = ((e.clientX / W) - 0.5) * 2 * MAX;
+      ty = ((e.clientY / H) - 0.5) * 2 * MAX;
+    }, { passive: true });
+  } else {
+    window.addEventListener('scroll', function(){
+      var y = window.scrollY || 0;
+      ty = -Math.max(-MAX, Math.min(MAX, (y / H) * MAX * 2));
+      tx = 0;
+    }, { passive: true });
+  }
+
+  // pause when hero is off-screen or tab hidden
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(en){
+      var vis = en[0].isIntersecting;
+      if (vis && !running) { running = true; t0 = performance.now(); requestAnimationFrame(draw); }
+      else if (!vis) running = false;
+    }, { threshold: 0 }).observe(canvas);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) running = false;
+    else if (!running) { running = true; t0 = performance.now(); requestAnimationFrame(draw); }
+  });
+
+  var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(resize, 120); }, { passive: true });
+  resize();
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
